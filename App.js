@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", getTodos);
 todoButton.addEventListener("click", addTodo);
 todoList.addEventListener("click", deleteCheck);
 filterOption.addEventListener("click", filterTodo);
-// todoList.addEventListener("click", editText);
+todoList.addEventListener("click", editText);
 
 // Functions
 function addTodo(event) {
@@ -115,12 +115,44 @@ function filterTodo(e) {
 function editText(e) {
   const modalDiv = document.createElement("div");
   modalDiv.classList.add("modal");
-  const paragraph = document.createElement("p");
-  paragraph.classList.add("parg");
-  paragraph.innerHTML = e.target.parentElement.children[0].textContent;
+  if (modalDiv) {
+    modalDiv.style.position = "absolute";
+    modalDiv.style.top = "0";
+  } else {
+    modalDiv.style.position = "none";
+    modalDiv.style.top = "none";
+  }
+  const paragraph = document.createElement("input");
+  paragraph.classList.add("ipt");
+  // paragraph.innerHTML = e.target.parentElement.children[0].textContent;
+  paragraph.value = e.target.parentElement.children[0].textContent;
   modalDiv.appendChild(paragraph);
-  // const pargValue = paragraph.textContent;
-  // console.log(e.target.parentElement.children[0].textContent);
+
+  // console.log("Ali");
+  // create buttons for Modal
+  const divButton = document.createElement("div");
+  divButton.classList.add("divButton");
+  modalDiv.appendChild(divButton);
+  const editBtn = document.createElement("button");
+  editBtn.classList.add("editBtn");
+  editBtn.innerText = "OK";
+  divButton.appendChild(editBtn);
+  const deleteBtn = document.createElement("button");
+  deleteBtn.classList.add("deleteBtn");
+  deleteBtn.innerText = "X";
+
+  divButton.appendChild(deleteBtn);
+  todoList.appendChild(modalDiv);
+  // add the text when click on Ok
+
+  // remove Modal when click on X
+  deleteBtn.addEventListener("click", (e) => {
+    // const event = e.target.parentElement.parentElement;
+    // modalDiv.style.display = "none";
+    // event.remove();
+    // console.log(event);
+    console.log("Ali");
+  });
 }
 
 // implementing the localStorage
