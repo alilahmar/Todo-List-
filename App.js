@@ -7,9 +7,88 @@ const filterOption = document.querySelector(".filter-todo");
 // Event Listeners (element or variable and event listener type 'click onMouse ...' and Function)
 document.addEventListener("DOMContentLoaded", getTodos);
 todoButton.addEventListener("click", addTodo);
-todoList.addEventListener("click", deleteCheck);
+// todoList.addEventListener("click", deleteCheck);
+todoList.addEventListener("click", handleButtons);
 filterOption.addEventListener("click", filterTodo);
-todoList.addEventListener("click", editText);
+// todoList.addEventListener("click", editText);
+
+function handleButtons(e) {
+  const item = e.target;
+  // console.log(item);
+  const buttonState = item.classList[0];
+  // console.log(buttonState);
+  switch (buttonState) {
+    case "todo-item":
+    //
+    // break;
+    case "complete-btn":
+      // completed
+
+      const todo = item.parentElement;
+      // console.log(todo);
+      // check it
+      todo.classList.toggle("completed");
+      break;
+    case "edit-btn":
+      // edit
+      const modalDiv = document.createElement("div");
+      modalDiv.classList.add("modal");
+      const paragraph = document.createElement("input");
+      paragraph.classList.add("ipt");
+      // todoList.appendChild(modalDiv);
+      paragraph.value = e.target.parentElement.children[0].textContent;
+      console.log("Mouhamed", paragraph);
+      modalDiv.appendChild(paragraph);
+
+      let inputAli = localStorage.getItem("todos");
+      console.log(inputAli.indexOf());
+
+      // create buttons for Modal
+      const divButton = document.createElement("div");
+      divButton.classList.add("divButton");
+      modalDiv.appendChild(divButton);
+      const editBtn = document.createElement("button");
+      editBtn.classList.add("editBtn");
+      editBtn.innerText = "OK";
+      divButton.appendChild(editBtn);
+      const deleteBtn = document.createElement("button");
+      deleteBtn.classList.add("deleteBtn");
+      deleteBtn.innerText = "X";
+      divButton.appendChild(deleteBtn);
+      // todoList.appendChild(modalDiv);
+      document.body.appendChild(modalDiv);
+      // add the text when click on Ok
+      editBtn.addEventListener("click", (e) => {
+        // const paragraph = document.createElement("input");
+        const item = e.target;
+        const inputTag = item.parentElement.parentElement.children[0];
+        const inputText = inputTag.value;
+        // let inputAli = localStorage.getItem("todos");
+        // console.log(inputAli.);
+      });
+      // remove Modal when click on X
+      deleteBtn.addEventListener("click", (e) => {
+        const event = e.target.parentElement.parentElement;
+        event.remove();
+      });
+
+      break;
+    case "trash-btn":
+      // delete list
+      const item = e.target;
+      // delete todo
+      if (item.classList[0] === "trash-btn") {
+        const todo = item.parentElement;
+        // Animation
+        todo.classList.add("fall");
+        // to remove from localStorage
+        removeLocalTodos(todo);
+        todo.addEventListener("transitionend", function () {
+          todo.remove();
+        });
+      }
+  }
+}
 
 // Functions
 function addTodo(event) {
@@ -24,6 +103,7 @@ function addTodo(event) {
   // to display text
   // newTodo.innerText = "hey";
   newTodo.innerText = todoInput.value;
+  // console.log("Ali", newTodo);
 
   // add a class to it
   newTodo.classList.add("todo-item");
@@ -31,6 +111,7 @@ function addTodo(event) {
   todoDiv.appendChild(newTodo);
   // add todo to localStorage
   saveLocalTodos(todoInput.value);
+  // console.log(todoInput.value);
   // check mark button
   const completedButton = document.createElement("button");
   // will not work with innerText
@@ -54,6 +135,10 @@ function addTodo(event) {
 
   // Append todoDiv to the ul
   todoList.appendChild(todoDiv);
+  if (todoInput.value === "") {
+    alert("write something ");
+    return;
+  }
   // clear todo input value with reset or give it empty string
   todoInput.value = "";
 }
@@ -100,7 +185,7 @@ function filterTodo(e) {
         }
         break;
       case "uncompleted":
-        // forgot break
+       
         if (!todo.classList.contains("completed")) {
           todo.style.display = "flex";
         } else {
@@ -115,13 +200,6 @@ function filterTodo(e) {
 function editText(e) {
   const modalDiv = document.createElement("div");
   modalDiv.classList.add("modal");
-  if (modalDiv) {
-    modalDiv.style.position = "absolute";
-    modalDiv.style.top = "0";
-  } else {
-    modalDiv.style.position = "none";
-    modalDiv.style.top = "none";
-  }
   const paragraph = document.createElement("input");
   paragraph.classList.add("ipt");
   // paragraph.innerHTML = e.target.parentElement.children[0].textContent;
